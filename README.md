@@ -331,7 +331,7 @@ MIT License - see [LICENSE](LICENSE) file for details.
 
 ## Credits
 
-Developed by [Nerdcel](https://nerdcel.de)
+Developed by [Marcel Hieke](https://marcelhieke.com)
 
 ## Support
 
