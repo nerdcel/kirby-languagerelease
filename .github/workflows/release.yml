@@ -1,0 +1,78 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*.*.*'
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    name: Build Release
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Get version from tag
+        id: get_version
+        run: echo "VERSION=${GITHUB_REF#refs/tags/v}" >> $GITHUB_OUTPUT
+
+      - name: Create release directory
+        run: |
+          mkdir -p languagerelease
+
+      - name: Copy plugin files
+        run: |
+          cp -r classes languagerelease/
+          cp -r dialogs languagerelease/
+          cp -r languages languagerelease/
+          cp -r src languagerelease/ 2>/dev/null || true
+          cp -r components languagerelease/ 2>/dev/null || true
+          cp index.php languagerelease/
+          cp index.js languagerelease/
+          cp helpers.php languagerelease/
+          cp composer.json languagerelease/
+          cp package.json languagerelease/ 2>/dev/null || true
+          cp README.md languagerelease/
+          cp CHANGELOG.md languagerelease/
+          cp LICENSE languagerelease/
+          cp CONFIGURATION.md languagerelease/ 2>/dev/null || true
+          cp FRONTEND-ACCESS.md languagerelease/ 2>/dev/null || true
+
+      - name: Create ZIP archive
+        run: |
+          zip -r kirby-languagerelease-${{ steps.get_version.outputs.VERSION }}.zip languagerelease
+
+      - name: Generate release notes
+        id: release_notes
+        run: |
+          VERSION=${{ steps.get_version.outputs.VERSION }}
+          echo "Generating release notes for version $VERSION"
+
+          # Extract changelog for this version
+          if [ -f CHANGELOG.md ]; then
+            awk "/## \[$VERSION\]/,/## \[.*\]/{if(/## \[.*\]/ && !/## \[$VERSION\]/)exit;print}" CHANGELOG.md > release_notes.md
+          else
+            echo "Release $VERSION" > release_notes.md
+          fi
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v1
+        with:
+          files: kirby-languagerelease-${{ steps.get_version.outputs.VERSION }}.zip
+          body_path: release_notes.md
+          draft: false
+          prerelease: false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Update composer.json version
+        if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags/')
+        run: |
+          VERSION=${{ steps.get_version.outputs.VERSION }}
+          sed -i "s/\"version\": \".*\"/\"version\": \"$VERSION\"/" composer.json
+

@@ -1,0 +1,36 @@
+{
+  "name": "nerdcel/kirby-languagerelease",
+  "description": "A Kirby CMS plugin to control the release status of language variants with frontend access control",
+  "version": "1.0.0",
+  "type": "kirby-plugin",
+  "license": "MIT",
+  "keywords": [
+    "kirby",
+    "kirby-cms",
+    "kirby-plugin",
+    "multilingual",
+    "language",
+    "release",
+    "publish",
+    "translation"
+  ],
+  "authors": [
+    {
+      "name": "Nerdcel",
+      "email": "info@nerdcel.de"
+    }
+  ],
+  "require": {
+    "php": "^8.2",
+    "getkirby/cms": "^5.0"
+  },
+  "autoload": {
+    "files": [
+      "index.php"
+    ]
+  },
+  "extra": {
+    "installer-name": "languagerelease"
+  }
+}
+

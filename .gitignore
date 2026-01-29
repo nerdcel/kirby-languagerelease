@@ -1,0 +1,28 @@
+# IDE
+*.log
+*.temp
+*.tmp
+# Temporary files
+
+build/
+dist/
+# Build
+
+vendor/
+# Composer
+
+yarn-error.log
+npm-debug.log
+node_modules/
+# Node
+
+Thumbs.db
+.DS_Store
+# OS
+
+*~
+*.swo
+*.swp
+.vscode/
+.idea/
+
