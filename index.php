@@ -25,8 +25,18 @@ foreach ($languageFiles as $lang) {
     }
 }
 
+// Get version from composer.json
+$composerFile = __DIR__.'/composer.json';
+$version = 'unknown';
+if (file_exists($composerFile)) {
+    $composerData = json_decode(file_get_contents($composerFile), true);
+    if (isset($composerData['version'])) {
+        $version = $composerData['version'];
+    }
+}
+
 Kirby::plugin('nerdcel/languagerelease', [
-    'version' => '1.0.0',
+    'version' => $version,
     'options' => [
         'autoIncludeButton' => true,
         'fieldName' => 'languageReleased',
