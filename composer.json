@@ -20,9 +20,16 @@
       "email": "info@nerdcel.de"
     }
   ],
+  "config": {
+    "optimize-autoloader": true,
+    "allow-plugins": {
+      "getkirby/composer-installer": true
+    }
+  },
   "require": {
     "php": "^8.2",
-    "getkirby/cms": "^5.0"
+    "getkirby/cms": "^5.0",
+    "getkirby/composer-installer": "^1.2.1"
   },
   "autoload": {
     "files": [
@@ -30,7 +37,8 @@
     ]
   },
   "extra": {
-    "installer-name": "languagerelease"
+    "installer-name": "kirby-languagerelease",
+    "kirby-cms-path": false
   }
 }
 
