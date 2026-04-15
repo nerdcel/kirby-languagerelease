@@ -174,28 +174,36 @@ fi
 # ── Update CHANGELOG.md ──────────────────────────────────────
 info "Updating CHANGELOG.md..."
 
-# Build the new link line
 NEW_LINK="[${NEW_VERSION}]: ${REPO_URL}/compare/${LATEST_TAG}...${NEW_TAG}"
-OLD_LINK_PATTERN="\[${CURRENT_VERSION}\]: "
 
-# Create the new changelog content
+# Write the new changelog entry to a temp file
+ENTRY_FILE=$(mktemp)
+echo -e "$CHANGELOG_ENTRY" > "$ENTRY_FILE"
+
+# Build new CHANGELOG.md:
+#   1. Header lines (everything before first ## [...] version heading)
+#   2. New entry
+#   3. Existing entries (from first ## [...] to end, excluding link lines)
+#   4. New link + existing links
+TMPFILE=$(mktemp)
 {
-  # Header (first 6 lines)
-  head -6 CHANGELOG.md
-  echo ""
-  # New entry
-  echo -e "$CHANGELOG_ENTRY"
-  echo ""
-  # Old entries (skip header)
-  tail -n +7 CHANGELOG.md | head -n -2
-  # Links section
-  echo "${NEW_LINK}"
-  # Keep existing links
-  grep '^\[' CHANGELOG.md | head -20
-  echo ""
-} > CHANGELOG.md.tmp
+  # 1. Print header (lines before first version heading)
+  sed -n '1,/^## \[/{ /^## \[/!p; }' CHANGELOG.md
 
-mv CHANGELOG.md.tmp CHANGELOG.md
+  # 2. New changelog entry
+  cat "$ENTRY_FILE"
+  echo ""
+
+  # 3. Existing version entries (from first ## to last non-link line)
+  sed -n '/^## \[/,$ p' CHANGELOG.md | grep -v '^\[.*\]: http'
+
+  # 4. Links: new link first, then existing
+  echo "$NEW_LINK"
+  grep '^\[.*\]: http' CHANGELOG.md
+} > "$TMPFILE"
+
+mv "$TMPFILE" CHANGELOG.md
+rm -f "$ENTRY_FILE"
 
 ok "CHANGELOG.md updated"
 
