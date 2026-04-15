@@ -36,6 +36,10 @@ Kirby::plugin('nerdcel/languagerelease', [
         'behavior' => '404', // Options: '404', 'redirect', 'default-content'
     ],
     'translations' => $translations,
+    'sections' => [
+        'languagerelease' => require __DIR__.'/sections/languagerelease.php',
+        'languagerelease-tree' => require __DIR__.'/sections/languagerelease-tree.php',
+    ],
     'hooks' => [
         'system.loadPlugins:after' => function () {
             if (!autoIncludeButton()) {

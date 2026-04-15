@@ -12,6 +12,13 @@ class TranslationsTest extends TestCase
         'submit-release',
         'submit-unrelease',
         'cancel',
+        'section-language',
+        'section-code',
+        'section-status',
+        'section-default',
+        'section-released',
+        'section-unreleased',
+        'tree-page',
     ];
 
     private array $languageCodes = ['de', 'en', 'es', 'fr', 'it', 'nl'];

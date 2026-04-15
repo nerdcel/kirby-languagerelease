@@ -8,5 +8,12 @@ return [
     "submit-release" => "Release",
     "submit-unrelease" => "Unrelease",
     "cancel" => "Cancel",
+    "section-language" => "Language",
+    "section-code" => "Code",
+    "section-status" => "Status",
+    "section-default" => "Default",
+    "section-released" => "Released",
+    "section-unreleased" => "Unreleased",
+    "tree-page" => "Page",
 ];
 

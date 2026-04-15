@@ -8,5 +8,12 @@ return [
     "submit-release" => "Publiceren",
     "submit-unrelease" => "Intrekken",
     "cancel" => "Annuleren",
+    "section-language" => "Taal",
+    "section-code" => "Code",
+    "section-status" => "Status",
+    "section-default" => "Standaard",
+    "section-released" => "Gepubliceerd",
+    "section-unreleased" => "Niet gepubliceerd",
+    "tree-page" => "Pagina",
 ];
 

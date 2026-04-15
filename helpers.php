@@ -29,7 +29,7 @@ if (!function_exists('isLanguageReleased')) {
     /**
      * Check if a page's language variant is released
      *
-     * @param \Kirby\Cms\Page $page
+     * @param \Kirby\Cms\Page|\Kirby\Content\Content $model
      * @return bool
      */
     function isLanguageReleased(\Kirby\Cms\Page | \Kirby\Content\Content $model): bool
@@ -37,17 +37,15 @@ if (!function_exists('isLanguageReleased')) {
         $fieldName = languageReleaseFieldName();
 
         if ($model instanceof \Kirby\Content\Content) {
-            $content = $model;
-        } elseif ($model instanceof \Kirby\Cms\Page) {
-            $content = $model->content();
-        } else {
-            return false;
-        }
-        if (!$model->has($fieldName)) {
-            return false;
+            return $model->get($fieldName)->or(false)->toBool();
         }
 
-        return $content->get($fieldName)->or(false)->toBool();
+        if ($model instanceof \Kirby\Cms\Page) {
+            $content = $model->version('latest')->content(kirby()->language());
+            return $content->get($fieldName)->or(false)->toBool();
+        }
+
+        return false;
     }
 }
 

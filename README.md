@@ -32,6 +32,8 @@ Editors can still access and preview all language variants through the Panel, re
 - ✅ **Multilingual Interface**: Translations for DE, EN, ES, FR, IT, NL
 - ✅ **Configurable Field Name**: Use custom field names for the release status
 - ✅ **Panel Integration**: ViewButton with checkbox interface
+- ✅ **Panel Section**: Overview of all language variants and their release status
+- ✅ **Page Tree Section**: Hierarchical tree view of all pages with release status per language
 
 ## Requirements
 
@@ -89,6 +91,137 @@ return [
 ### 3. Release Language Variants
 
 In the Panel, open a page and switch to a non-default language. You'll see a button to release that language variant in the upper right area next to the language select button.
+
+## Panel Section
+
+The plugin provides a custom Panel section that displays all language variants of a page and their current release status at a glance.
+
+### Add the Section to Your Blueprint
+
+```yaml
+# site/blueprints/pages/default.yml
+sections:
+  languagerelease:
+    type: languagerelease
+    label: Language Release Status
+```
+
+The section shows a table with:
+
+| Column   | Description                                          |
+|----------|------------------------------------------------------|
+| Language | The language name (e.g. "English", "Deutsch")        |
+| Code     | The language code (e.g. `en`, `de`)                  |
+| Status   | **Default**, **Released** (green), or **Unreleased** (red) |
+
+The default language is always marked as "Default" since it does not require release.
+
+### Blueprint Examples
+
+#### Sidebar Section
+
+```yaml
+columns:
+  - width: 2/3
+    sections:
+      content:
+        type: fields
+        fields:
+          title:
+            type: text
+          text:
+            type: textarea
+  - width: 1/3
+    sections:
+      languagerelease:
+        type: languagerelease
+        label: Languages
+```
+
+#### Full-Width Section
+
+```yaml
+sections:
+  languagerelease:
+    type: languagerelease
+    label: Translation Status
+  content:
+    type: fields
+    fields:
+      # your fields...
+```
+
+## Page Tree Section
+
+The plugin also provides a **tree section** that displays all pages of the site (including drafts) in a hierarchical tree with their release status across all languages at a glance. This is useful for getting a bird's eye view of the entire site's translation status.
+
+### Add the Tree Section to Your Blueprint
+
+The tree section is best suited for the `site.yml` blueprint or a dashboard-style page:
+
+```yaml
+# site/blueprints/site.yml
+sections:
+  releasetree:
+    type: languagerelease-tree
+    label: Translation Overview
+```
+
+### What the Tree Shows
+
+The tree section renders a table with:
+
+| Column       | Description                                                       |
+|--------------|-------------------------------------------------------------------|
+| Page         | Hierarchical page tree with expandable/collapsible children       |
+| Per Language | One column per language with a colored dot indicating the status  |
+
+Status indicators:
+- 🔘 **Grey dot** — Default language (always released)
+- 🟢 **Green dot** — Released
+- 🔴 **Red dot** — Unreleased
+
+Each page title links to its Panel page, and child pages can be expanded or collapsed.
+
+### Blueprint Examples
+
+#### Site Blueprint (Recommended)
+
+```yaml
+# site/blueprints/site.yml
+columns:
+  - width: 1/1
+    sections:
+      releasetree:
+        type: languagerelease-tree
+        label: Translation Overview
+```
+
+#### Combined with Per-Page Section
+
+You can use both section types together — the tree for a global overview and the per-page section for the current page:
+
+```yaml
+# site/blueprints/pages/default.yml
+columns:
+  - width: 2/3
+    sections:
+      content:
+        type: fields
+        fields:
+          title:
+            type: text
+          text:
+            type: textarea
+  - width: 1/3
+    sections:
+      languagerelease:
+        type: languagerelease
+        label: This Page
+      releasetree:
+        type: languagerelease-tree
+        label: All Pages
+```
 
 ## Configuration Options
 
@@ -263,6 +396,10 @@ All Panel texts automatically display in the user's selected language.
 
 **Solution:** Make sure you're logged into the Panel. The preview requires a valid session.
 
+### Issue: Language Release section is empty
+
+**Solution:** The section loads its data asynchronously from the Kirby API using the `section` mixin. Make sure the built `index.js` is up to date by running `npm run build`. If developing locally, use `npm run dev` for automatic rebuilds.
+
 ### Issue: 404 errors on released pages
 
 **Solution:** Check that the field name in your configuration matches the field in your blueprints.
@@ -306,16 +443,29 @@ return [
 ```bash
 git clone https://github.com/nerdcel/kirby-languagerelease.git
 cd kirby-languagerelease
+composer install
 ```
 
-### Testing
+### Frontend Build
 
-Test the plugin in your local Kirby installation:
+```bash
+npm run build       # Build production assets
+npm run dev         # Watch mode for development
+```
 
-1. Create a test blueprint with the `languageReleased` field (optional)
-2. Set up multiple languages
-3. Test frontend access with released/unreleased variants
-4. Test preview mode through Panel
+### Running Tests
+
+```bash
+composer test
+```
+
+### Releasing
+
+```bash
+composer release:patch   # Bugfix (1.0.1 → 1.0.2)
+composer release:minor   # Feature (1.0.1 → 1.1.0)
+composer release:major   # Breaking change (1.0.1 → 2.0.0)
+```
 
 ## Changelog
 

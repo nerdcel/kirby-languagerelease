@@ -23,9 +23,9 @@ class ReleaseButton extends ViewButton
     public function props(): array
     {
         $fieldName = languageReleaseFieldName();
-        $released = $this->model->content()->has($fieldName)
-            ? $this->model->content()->get($fieldName)->or(false)->toBool()
-            : false;
+        $language  = $this->kirby->currentLanguage();
+        $content   = $this->model->version('latest')->content($language);
+        $released  = $content->get($fieldName)->or(false)->toBool();
 
         return [
             'languages' => $this->kirby->languages()->toArray(),

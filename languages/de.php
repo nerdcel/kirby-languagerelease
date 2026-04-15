@@ -8,4 +8,11 @@ return [
     "submit-release" => "Freigeben",
     "submit-unrelease" => "Zurückziehen",
     "cancel" => "Abbrechen",
+    "section-language" => "Sprache",
+    "section-code" => "Code",
+    "section-status" => "Status",
+    "section-default" => "Standard",
+    "section-released" => "Freigegeben",
+    "section-unreleased" => "Nicht freigegeben",
+    "tree-page" => "Seite",
 ];

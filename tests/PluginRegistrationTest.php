@@ -76,6 +76,7 @@ class PluginRegistrationTest extends TestCase
         $this->assertFileExists($basePath . '/helpers.php');
         $this->assertFileExists($basePath . '/classes/ReleaseButton.php');
         $this->assertFileExists($basePath . '/dialogs/release-language-variant.php');
+        $this->assertFileExists($basePath . '/sections/languagerelease.php');
     }
 
     public function testDialogReturnsValidStructure(): void

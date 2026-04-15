@@ -52,8 +52,10 @@ jobs:
           cp -r classes languagerelease/
           cp -r dialogs languagerelease/
           cp -r languages languagerelease/
+          cp -r sections languagerelease/
           cp index.php languagerelease/
           cp index.js languagerelease/
+          cp index.css languagerelease/ 2>/dev/null || true
           cp helpers.php languagerelease/
           cp composer.json languagerelease/
           cp README.md languagerelease/
