@@ -1,28 +1,28 @@
-# IDE
+# ── OS ────────────────────────────────────────
+.DS_Store
+Thumbs.db
+
+# ── IDE ───────────────────────────────────────
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# ── Dependencies ──────────────────────────────
+vendor/
+node_modules/
+
+# ── Build artifacts ───────────────────────────
+build/
+dist/
+
+# ── Testing ───────────────────────────────────
+.phpunit.cache/
+
+# ── Logs ──────────────────────────────────────
 *.log
 *.temp
 *.tmp
-# Temporary files
-
-build/
-dist/
-# Build
-
-vendor/
-# Composer
-
-yarn-error.log
 npm-debug.log
-node_modules/
-# Node
-
-Thumbs.db
-.DS_Store
-# OS
-
-*~
-*.swo
-*.swp
-.vscode/
-.idea/
-
+yarn-error.log
