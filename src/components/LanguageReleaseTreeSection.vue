@@ -1,5 +1,23 @@
 <template>
   <k-section :label="label">
+    <div class="k-languagerelease-tree-legend">
+      <span class="k-languagerelease-tree-legend-item">
+        <span class="k-languagerelease-tree-dot k-languagerelease-tree-dot--default" />
+        {{ $t('nerdcel.languagerelease.section-default') }}
+      </span>
+      <span class="k-languagerelease-tree-legend-item">
+        <span class="k-languagerelease-tree-dot k-languagerelease-tree-dot--released" />
+        {{ $t('nerdcel.languagerelease.section-released') }}
+      </span>
+      <span class="k-languagerelease-tree-legend-item">
+        <span class="k-languagerelease-tree-dot k-languagerelease-tree-dot--translated" />
+        {{ $t('nerdcel.languagerelease.section-translated') }}
+      </span>
+      <span class="k-languagerelease-tree-legend-item">
+        <span class="k-languagerelease-tree-dot k-languagerelease-tree-dot--missing" />
+        {{ $t('nerdcel.languagerelease.section-missing') }}
+      </span>
+    </div>
     <table class="k-languagerelease-tree-table">
       <thead>
         <tr>
@@ -140,7 +158,8 @@ export default {
     dotClass(status) {
       if (status.isDefault) return 'k-languagerelease-tree-dot--default';
       if (status.released) return 'k-languagerelease-tree-dot--released';
-      return 'k-languagerelease-tree-dot--unreleased';
+      if (status.hasTranslation) return 'k-languagerelease-tree-dot--translated';
+      return 'k-languagerelease-tree-dot--missing';
     },
     dotTitle(lang, status) {
       if (status.isDefault) {
@@ -149,13 +168,31 @@ export default {
       if (status.released) {
         return lang.name + ': ' + this.$t('nerdcel.languagerelease.section-released');
       }
-      return lang.name + ': ' + this.$t('nerdcel.languagerelease.section-unreleased');
+      if (status.hasTranslation) {
+        return lang.name + ': ' + this.$t('nerdcel.languagerelease.section-translated');
+      }
+      return lang.name + ': ' + this.$t('nerdcel.languagerelease.section-missing');
     },
   },
 };
 </script>
 
 <style>
+.k-languagerelease-tree-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-4);
+  margin-bottom: var(--spacing-3);
+  font-size: var(--text-xs);
+  color: var(--color-text-dimmed);
+}
+
+.k-languagerelease-tree-legend-item {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-1);
+}
+
 .k-languagerelease-tree-table {
   width: 100%;
   border-collapse: collapse;
@@ -250,7 +287,11 @@ export default {
   background: var(--color-green-550);
 }
 
-.k-languagerelease-tree-dot--unreleased {
+.k-languagerelease-tree-dot--translated {
+  background: var(--color-yellow-550);
+}
+
+.k-languagerelease-tree-dot--missing {
   background: var(--color-red-550);
 }
 </style>

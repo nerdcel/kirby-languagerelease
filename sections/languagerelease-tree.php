@@ -42,15 +42,18 @@ return [
                         $isDefault = $default && $code === $default->code();
 
                         if ($isDefault) {
-                            $released = true;
+                            $released       = true;
+                            $hasTranslation = true;
                         } else {
-                            $content  = $page->version('latest')->content($language);
-                            $released = $content->get($fieldName)->or(false)->toBool();
+                            $content        = $page->version('latest')->content($language);
+                            $released       = $content->get($fieldName)->or(false)->toBool();
+                            $hasTranslation = $page->translation($code) !== null && $page->translation($code)->exists();
                         }
 
                         $statuses[$code] = [
-                            'released'  => $released,
-                            'isDefault' => $isDefault,
+                            'released'       => $released,
+                            'isDefault'      => $isDefault,
+                            'hasTranslation' => $hasTranslation,
                         ];
                     }
 

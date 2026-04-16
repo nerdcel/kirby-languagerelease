@@ -14,6 +14,8 @@ return [
     "section-default" => "Standaard",
     "section-released" => "Gepubliceerd",
     "section-unreleased" => "Niet gepubliceerd",
+    "section-translated" => "Vertaald (niet gepubliceerd)",
+    "section-missing" => "Geen vertaling",
     "tree-page" => "Pagina",
 ];
 

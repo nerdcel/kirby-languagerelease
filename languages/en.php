@@ -14,6 +14,8 @@ return [
     "section-default" => "Default",
     "section-released" => "Released",
     "section-unreleased" => "Unreleased",
+    "section-translated" => "Translated (not released)",
+    "section-missing" => "No translation",
     "tree-page" => "Page",
 ];
 

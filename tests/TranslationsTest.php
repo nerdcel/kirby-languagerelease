@@ -18,6 +18,8 @@ class TranslationsTest extends TestCase
         'section-default',
         'section-released',
         'section-unreleased',
+        'section-translated',
+        'section-missing',
         'tree-page',
     ];
 

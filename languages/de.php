@@ -14,5 +14,7 @@ return [
     "section-default" => "Standard",
     "section-released" => "Freigegeben",
     "section-unreleased" => "Nicht freigegeben",
+    "section-translated" => "Übersetzt (nicht freigegeben)",
+    "section-missing" => "Keine Übersetzung",
     "tree-page" => "Seite",
 ];

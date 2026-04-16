@@ -14,6 +14,8 @@ return [
     "section-default" => "Predeterminado",
     "section-released" => "Publicado",
     "section-unreleased" => "No publicado",
+    "section-translated" => "Traducido (no publicado)",
+"section-missing" => "Sin traducción",
     "tree-page" => "Página",
 ];
 

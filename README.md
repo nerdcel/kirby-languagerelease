@@ -179,7 +179,8 @@ The tree section renders a table with:
 Status indicators:
 - 🔘 **Grey dot** — Default language (always released)
 - 🟢 **Green dot** — Released
-- 🔴 **Red dot** — Unreleased
+- 🟡 **Yellow dot** — Translated but not yet released
+- 🔴 **Red dot** — No translation
 
 Each page title links to its Panel page, and child pages can be expanded or collapsed.
 
