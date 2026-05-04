@@ -34,6 +34,23 @@ if (!function_exists('isLanguageReleased')) {
      */
     function isLanguageReleased(\Kirby\Cms\Page | \Kirby\Content\Content $model): bool
     {
+        // In the Panel/API context, always treat as released
+        $kirby = kirby();
+        if ($kirby->user()) {
+            $panelSlug = $kirby->option('panel.slug', 'panel');
+            $path = $kirby->request()->path()->toString();
+
+            // Check if we're on a Panel or API route
+            if (
+                str_starts_with($path, $panelSlug . '/') ||
+                $path === $panelSlug ||
+                str_starts_with($path, 'api/') ||
+                $path === 'api'
+            ) {
+                return true;
+            }
+        }
+
         $fieldName = languageReleaseFieldName();
 
         if ($model instanceof \Kirby\Content\Content) {

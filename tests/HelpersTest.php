@@ -233,6 +233,200 @@ class HelpersTest extends TestCase
         $this->assertFalse(isLanguageReleased($page));
     }
 
+    // ── isLanguageReleased() bypasses check for Panel/API routes ──
+
+    public function testIsLanguageReleasedReturnsTrueOnPanelRoute(): void
+    {
+        $this->app = new App([
+            'roots' => [
+                'index'    => static::$tmpDir,
+                'content'  => static::$tmpDir . '/content',
+                'accounts' => static::$tmpDir . '/accounts',
+                'sessions' => static::$tmpDir . '/sessions',
+            ],
+            'languages' => [
+                [
+                    'code'    => 'en',
+                    'name'    => 'English',
+                    'default' => true,
+                ],
+                [
+                    'code'    => 'de',
+                    'name'    => 'Deutsch',
+                ],
+            ],
+            'options' => [
+                'whoops' => false,
+            ],
+            'users' => [
+                [
+                    'email' => 'test@example.com',
+                    'role'  => 'admin',
+                ],
+            ],
+            'request' => [
+                'url' => 'https://example.com/panel/pages/test',
+            ],
+        ]);
+
+        $this->app->impersonate('test@example.com');
+
+        $page = $this->createPage([
+            'slug'    => 'unreleased-panel-route',
+            'content' => [
+                'title'            => 'Unreleased Page',
+                'languagereleased' => 'false',
+            ],
+        ]);
+
+        $this->assertTrue(isLanguageReleased($page));
+    }
+
+    public function testIsLanguageReleasedReturnsTrueOnApiRoute(): void
+    {
+        $this->app = new App([
+            'roots' => [
+                'index'    => static::$tmpDir,
+                'content'  => static::$tmpDir . '/content',
+                'accounts' => static::$tmpDir . '/accounts',
+                'sessions' => static::$tmpDir . '/sessions',
+            ],
+            'languages' => [
+                [
+                    'code'    => 'en',
+                    'name'    => 'English',
+                    'default' => true,
+                ],
+                [
+                    'code'    => 'de',
+                    'name'    => 'Deutsch',
+                ],
+            ],
+            'options' => [
+                'whoops' => false,
+            ],
+            'users' => [
+                [
+                    'email' => 'test@example.com',
+                    'role'  => 'admin',
+                ],
+            ],
+            'request' => [
+                'url' => 'https://example.com/api/pages/test',
+            ],
+        ]);
+
+        $this->app->impersonate('test@example.com');
+
+        $page = $this->createPage([
+            'slug'    => 'unreleased-api-route',
+            'content' => [
+                'title'            => 'Unreleased Page',
+                'languagereleased' => 'false',
+            ],
+        ]);
+
+        $this->assertTrue(isLanguageReleased($page));
+    }
+
+    public function testIsLanguageReleasedReturnsFalseForLoggedInUserOnFrontendRoute(): void
+    {
+        $this->app = new App([
+            'roots' => [
+                'index'    => static::$tmpDir,
+                'content'  => static::$tmpDir . '/content',
+                'accounts' => static::$tmpDir . '/accounts',
+                'sessions' => static::$tmpDir . '/sessions',
+            ],
+            'languages' => [
+                [
+                    'code'    => 'en',
+                    'name'    => 'English',
+                    'default' => true,
+                ],
+                [
+                    'code'    => 'de',
+                    'name'    => 'Deutsch',
+                ],
+            ],
+            'options' => [
+                'whoops' => false,
+            ],
+            'users' => [
+                [
+                    'email' => 'test@example.com',
+                    'role'  => 'admin',
+                ],
+            ],
+            'request' => [
+                'url' => 'https://example.com/en/some-page',
+            ],
+        ]);
+
+        $this->app->impersonate('test@example.com');
+
+        $page = $this->createPage([
+            'slug'    => 'unreleased-frontend-route',
+            'content' => [
+                'title'            => 'Unreleased Page',
+                'languagereleased' => 'false',
+            ],
+        ]);
+
+        // Logged in but on a frontend route — should NOT bypass
+        $this->assertFalse(isLanguageReleased($page));
+    }
+
+    public function testIsLanguageReleasedRespectsCustomPanelSlug(): void
+    {
+        $this->app = new App([
+            'roots' => [
+                'index'    => static::$tmpDir,
+                'content'  => static::$tmpDir . '/content',
+                'accounts' => static::$tmpDir . '/accounts',
+                'sessions' => static::$tmpDir . '/sessions',
+            ],
+            'languages' => [
+                [
+                    'code'    => 'en',
+                    'name'    => 'English',
+                    'default' => true,
+                ],
+                [
+                    'code'    => 'de',
+                    'name'    => 'Deutsch',
+                ],
+            ],
+            'options' => [
+                'whoops' => false,
+                'panel' => [
+                    'slug' => 'admin',
+                ],
+            ],
+            'users' => [
+                [
+                    'email' => 'test@example.com',
+                    'role'  => 'admin',
+                ],
+            ],
+            'request' => [
+                'url' => 'https://example.com/admin/pages/test',
+            ],
+        ]);
+
+        $this->app->impersonate('test@example.com');
+
+        $page = $this->createPage([
+            'slug'    => 'unreleased-custom-panel',
+            'content' => [
+                'title'            => 'Unreleased Page',
+                'languagereleased' => 'false',
+            ],
+        ]);
+
+        $this->assertTrue(isLanguageReleased($page));
+    }
+
     // ── isAuthenticatedPreview() ─────────────────────────────
 
     public function testIsNotAuthenticatedPreviewWithoutPreviewParam(): void

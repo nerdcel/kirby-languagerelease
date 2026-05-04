@@ -346,11 +346,11 @@ $field = languageReleaseFieldName();
 
 ### `isLanguageReleased(Page $page): bool`
 
-Checks if a page's current language variant is released.
+Checks if a page's current language variant is released. **When the request is on a Panel or API route (and a user is logged in), this function always returns `true`**, so the Panel can operate without language release filtering. On frontend routes, the check is always applied — even for logged-in users.
 
 ```php
 if (isLanguageReleased($page)) {
-    // Language is released
+    // Language is released (or user is logged into the Panel)
 }
 ```
 
